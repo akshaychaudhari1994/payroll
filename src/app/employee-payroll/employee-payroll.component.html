@@ -1,0 +1,23 @@
+<!-- employee-payroll.component.html -->
+<div class="container mt-4">
+    <h2>Employee Payroll Screen</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th (click)="sortEmployees('name')">Employee Name</th>
+          <th (click)="sortEmployees('basicSalary')">Basic Salary</th>
+          <th (click)="sortEmployees('deductions')">Deductions</th>
+          <th (click)="sortEmployees('netPayout')">Net Payout</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let employee of employees">
+          <td (click)="showDetailedCalculation(employee)">{{ employee.name }}</td>
+          <td>{{ employee.basicSalary }}</td>
+          <td>{{ employee.deductions }}</td>
+          <td>{{ employee.netPayout }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
