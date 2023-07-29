@@ -11,5 +11,5 @@ export class DetailedCalculationComponent {
   @Input() selectedEmployee!: Employee;
 
   constructor() { }
-
+  
 }
