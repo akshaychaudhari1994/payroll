@@ -1,12 +1,15 @@
 <div class="container payroll-calculation mt-4">
     <h2 class="mb-4">Payroll Calculation</h2>
-    <div class="form-group">
-        <label for="monthSelection">See salaries for the month of:</label>
-        <select id="monthSelection" class="form-control" [(ngModel)]="selectedMonth">
-            <option *ngFor="let month of months" [value]="month.name">{{ month.name }}</option>
-        </select>
+    <div class="row col-md-12">
+        <div class="col-md-8 form-group">
+            <label for="monthSelection">See salaries for the month of:</label>
+            <select id="monthSelection" class="form-control" [(ngModel)]="selectedMonth">
+                <option *ngFor="let month of months" [value]="month.name">{{ month.name }}</option>
+            </select>
+        </div>
+        <div class="col-md-4 my-4">
+            <button class="btn btn-primary" (click)="calculatePayroll()">Calculate Payroll</button>
+        </div>
     </div>
-    <button class="btn btn-primary" (click)="calculatePayroll()">Calculate Payroll</button>
-
     <app-employee-payroll [employees]="employeeData"></app-employee-payroll>
 </div>
