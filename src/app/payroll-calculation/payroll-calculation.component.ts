@@ -1,7 +1,8 @@
 // payroll-calculation.component.ts
 import { Component } from '@angular/core';
-import { PayrollService } from '../payroll.service';
 import { Month, Months } from '../models/months';
+import { PayrollService } from '../services/payroll.service';
+import { Employee } from '../models/employee';
 
 @Component({
   selector: 'app-payroll-calculation',
@@ -29,11 +30,12 @@ export class PayrollCalculationComponent {
 
   constructor(private payrollService: PayrollService) { }
 
+  employeeData: Employee[] = []
   calculatePayroll() {
-    // Assuming you have a method in your service to fetch payroll information for the selected month
     this.payrollService.getPayrollInformation(this.selectedMonth).subscribe(
+      
       (payrollData) => {
-        // Assuming you want to handle the retrieved payrollData here
+        this.employeeData = payrollData
         console.log('Payroll data for', this.selectedMonth, ':', payrollData);
       },
       (error) => {

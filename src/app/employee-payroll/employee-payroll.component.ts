@@ -1,44 +1,57 @@
 // employee-payroll.component.ts
-import { Component, OnInit } from '@angular/core';
-import { PayrollService } from '../payroll.service';
+import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { Employee } from '../models/employee';
+import { PayrollService } from '../services/payroll.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-employee-payroll',
   templateUrl: './employee-payroll.component.html',
-  styleUrls: ['./employee-payroll.component.scss'], // Add styles if needed
+  styleUrls: ['./employee-payroll.component.scss'],
 })
 export class EmployeePayrollComponent implements OnInit {
-  employees!: Employee[]; // You should create a custom model for employees instead of 'any[]'.
-  sortDirection: string = 'asc'; // Sorting direction for table columns
-  sortColumn: string = 'name'; // Column to sort by initially
+  @Input() employees!: Employee[];
+  selectedEmployee!: Employee
+  modalRef?: BsModalRef;
 
-  constructor(private payrollService: PayrollService) { }
+  constructor(private payrollService: PayrollService,
+    private modalService: BsModalService) { }
 
   ngOnInit() {
-    this.getEmployeePayrollInformation();
   }
 
   getEmployeePayrollInformation(selectedMonth?: any) {
-    this.payrollService.getPayrollInformation(selectedMonth).subscribe(
-      (data) => {
+    this.payrollService.getPayrollInformation(selectedMonth).subscribe({
+      next: (data) => {
         this.employees = data;
       },
-      (error) => {
+      error: (error) => {
         console.error('Error fetching employee payroll information:', error);
       }
-    );
+    })
   }
 
+  sortAsc: boolean = true;
+
   sortEmployees(column: string) {
-    // Implement the logic to sort employees by the selected column.
-    // You can use Array.sort() to sort the 'employees' array based on the 'column'.
-    // Remember to toggle the sort direction if the same column is clicked again.
-    // Once sorted, update the 'employees' array with the sorted data.
+    this.employees = this.employees.sort((a, b) => {
+      const aValue: any = a[column as keyof Employee];
+      const bValue: any = b[column as keyof Employee];
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return this.sortAsc ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+      }
+      return this.sortAsc ? aValue - bValue : bValue - aValue;
+    });
+    this.sortAsc = !this.sortAsc;
   }
 
   showDetailedCalculation(employee: any) {
-    // Implement the logic to show the detailed calculation view for the selected employee.
-    // You can use a modal or a pop-up component to display the details.
+    employee.netPayout = employee.basicSalary - employee.deductions - employee.loanDetails.emi;
+    this.selectedEmployee = employee;
+  }
+
+  openModal(template: TemplateRef<any>, employee: any) {
+    this.modalRef = this.modalService.show(template);
+    this.selectedEmployee = employee
   }
 }

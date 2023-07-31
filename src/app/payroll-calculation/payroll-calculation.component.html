@@ -3,8 +3,10 @@
     <div class="form-group">
         <label for="monthSelection">See salaries for the month of:</label>
         <select id="monthSelection" class="form-control" [(ngModel)]="selectedMonth">
-            <option *ngFor="let month of months" [value]="month.id">{{ month.name }}</option>
+            <option *ngFor="let month of months" [value]="month.name">{{ month.name }}</option>
         </select>
     </div>
     <button class="btn btn-primary" (click)="calculatePayroll()">Calculate Payroll</button>
+
+    <app-employee-payroll [employees]="employeeData"></app-employee-payroll>
 </div>
